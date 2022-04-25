@@ -45,6 +45,14 @@ describe Fastlane do
         expect(result).to eq("pod repo push MyRepo './fastlane/spec/fixtures/podspecs/test.podspec' --allow-warnings --use-libraries")
       end
 
+      it "generates the correct pod push command with subspec parameter" do
+        result = Fastlane::FastFile.new.parse("lane :test do
+          pod_lib_lint(subspec: 'test-subspec')
+        end").runner.execute(:test)
+
+        expect(result).to eq("pod repo push MyRepo './fastlane/spec/fixtures/podspecs/test.podspec' --subspec='test-subspec'")
+      end
+
       it "generates the correct pod push command with a repo parameter with the skip import validation and skip tests flags" do
         result = Fastlane::FastFile.new.parse("lane :test do
           pod_push(path: './fastlane/spec/fixtures/podspecs/test.podspec', repo: 'MyRepo', skip_import_validation: true, skip_tests: true)

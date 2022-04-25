@@ -58,6 +58,11 @@ module Fastlane
         if params[:synchronous]
           command << "--synchronous"
         end
+        
+        if params[:subspec]
+          subspec = params[:subspec]
+          command << "--subspec='#{subspec}'"
+        end
 
         result = Actions.sh(command.join(' '))
         UI.success("Successfully pushed Podspec ⬆️ ")
@@ -143,7 +148,12 @@ module Fastlane
                                        description: "If validation depends on other recently pushed pods, synchronize",
                                        optional: true,
                                        type: Boolean,
-                                       env_name: "FL_POD_PUSH_SYNCHRONOUS")
+                                       env_name: "FL_POD_PUSH_SYNCHRONOUS"),
+          FastlaneCore::ConfigItem.new(key: :subspec,
+                                       description: "A specific subspec to lint instead of the entire spec",
+                                       type: String,
+                                       optional: true,
+                                       env_name: "FL_POD_PUSH_LINT_SUBSPEC"),
         ]
       end
 
